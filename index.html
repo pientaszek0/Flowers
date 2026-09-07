@@ -15,9 +15,8 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            /* 100dvh dynamicznie dopasowuje się do ekranu na telefonie */
             height: 100dvh; 
-            overflow: hidden; /* Blokuje przewijanie we wszystkich kierunkach */
+            overflow: hidden; 
             background: radial-gradient(ellipse at top center, #6b1f42 0%, #1f0814 50%, #050505 100%);
             background-attachment: fixed;
             color: white;
@@ -26,7 +25,7 @@
             flex-direction: column;
             align-items: center;
             position: relative;
-            touch-action: none; /* Blokuje zachowania dotykowe typu 'pull-to-refresh' czy zoom */
+            touch-action: none; 
         }
 
         /* Dodatkowe, silne "słońce" (glow) na samej górze */
@@ -161,11 +160,14 @@
         /* Magiczne świetliki */
         .particle {
             position: absolute;
+            top: 0;
+            opacity: 0; /* Kropki są niewidoczne w trakcie opóźnienia (delay) */
             background: #ffb6c1;
             border-radius: 50%;
             pointer-events: none;
             box-shadow: 0 0 10px #ffb6c1, 0 0 20px #ff69b4;
-            animation: floatUp linear infinite;
+            /* Parametr 'both' gwarantuje że przed startem zostaną zaaplikowane wartości z 0% klatki */
+            animation: floatUp linear infinite both;
             z-index: 2;
         }
 
