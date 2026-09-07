@@ -2,17 +2,22 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dla mojej Księżniczki</title>
     
     <!-- Import eleganckich czcionek -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
     
     <style>
-        /* Tło z magiczną, jasną poświatą z góry */
-        body {
+        /* Całkowite zablokowanie przewijania i tło */
+        html, body {
             margin: 0;
             padding: 0;
+            width: 100%;
+            height: 100%;
+            /* 100dvh dynamicznie dopasowuje się do ekranu na telefonie */
+            height: 100dvh; 
+            overflow: hidden; /* Blokuje przewijanie we wszystkich kierunkach */
             background: radial-gradient(ellipse at top center, #6b1f42 0%, #1f0814 50%, #050505 100%);
             background-attachment: fixed;
             color: white;
@@ -20,9 +25,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
             position: relative;
+            touch-action: none; /* Blokuje zachowania dotykowe typu 'pull-to-refresh' czy zoom */
         }
 
         /* Dodatkowe, silne "słońce" (glow) na samej górze */
@@ -67,6 +71,7 @@
             transition: all 0.3s ease;
             cursor: pointer;
             backdrop-filter: blur(5px);
+            text-align: center;
         }
 
         .nav-btn.active {
@@ -168,6 +173,32 @@
             0% { transform: translateY(100vh) scale(0); opacity: 0; }
             50% { opacity: 0.6; }
             100% { transform: translateY(-100px) scale(1); opacity: 0; }
+        }
+
+        /* --- DOPASOWANIA NA URZĄDZENIA MOBILNE --- */
+        @media (max-width: 768px) {
+            header {
+                margin-top: 15px;
+            }
+            nav {
+                gap: 8px;
+                padding: 0 10px;
+            }
+            .nav-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+                width: 100%; 
+                max-width: 250px;
+            }
+            .flower-container {
+                height: 45vh;
+                min-height: 250px;
+            }
+            .caption {
+                font-size: 0.7rem;
+                letter-spacing: 1px;
+                margin-top: 15px;
+            }
         }
     </style>
 </head>
