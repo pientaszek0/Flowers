@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dla mojej Księżniczki</title>
+    
+    <!-- Import eleganckich czcionek -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Całkowite zablokowanie przewijania i tło */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh; 
+            overflow: hidden; 
+            background: radial-gradient(ellipse at top center, #6b1f42 0%, #1f0814 50%, #050505 100%);
+            background-attachment: fixed;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            touch-action: none; 
+        }
+
+        /* Silne "słońce" (glow) na samej górze */
+        .sun-glow {
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 230, 240, 0.6) 0%, rgba(255, 105, 180, 0.2) 50%, transparent 80%);
+            filter: blur(60px);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Kontener wypychający zawartość na idealny środek ekranu */
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding-bottom: 20px;
+        }
+
+        /* Kontener na łąkę - USUNIĘTO POŚWIATĘ (drop-shadow) ZA KWIATAMI */
+        .flower-container {
+            position: relative;
+            width: 100%;
+            max-width: 1400px;
+            height: 50vh; 
+            min-height: 300px;
+            max-height: 550px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 5;
+        }
+
+        /* Subtelny, mały, szary podpis */
+        .caption {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            color: #888888;
+            text-align: center;
+            margin-top: 20px;
+            padding: 0 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            z-index: 10;
+            animation: fadeIn 3s ease-in-out;
+        }
+
+        /* Animacje kołysania kwiatów */
+        .tulip-center { animation: sway 4s ease-in-out infinite alternate; }
+        .tulip-left   { animation: swayLeft 4.5s ease-in-out infinite alternate; }
+        .tulip-right  { animation: swayRight 5s ease-in-out infinite alternate; }
+        .tulip-fast   { animation: sway 3s ease-in-out infinite alternate; }
+        .tulip-slow   { animation: swayLeft 6s ease-in-out infinite alternate; }
+
+        /* Animacje kołysania trawy */
+        .grass-1 { animation: swayGrass 3s ease-in-out infinite alternate; }
+        .grass-2 { animation: swayGrassReverse 4s ease-in-out infinite alternate; }
+        .grass-3 { animation: swayGrass 5s ease-in-out infinite alternate; }
+
+        @keyframes sway { 0% { transform: rotate(-2deg); } 100% { transform: rotate(3deg); } }
+        @keyframes swayLeft { 0% { transform: rotate(-4deg); } 100% { transform: rotate(1deg); } }
+        @keyframes swayRight { 0% { transform: rotate(-1deg); } 100% { transform: rotate(4deg); } }
+        
+        @keyframes swayGrass { 0% { transform: rotate(-5deg); } 100% { transform: rotate(5deg); } }
+        @keyframes swayGrassReverse { 0% { transform: rotate(4deg); } 100% { transform: rotate(-4deg); } }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Magiczne świetliki - zoptymalizowane, aby nie blokowały się na krawędzi */
+        .particle {
+            position: absolute;
+            bottom: -50px; /* Startują ukryte pod ekranem */
+            background: #ffb6c1;
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 10px #ffb6c1, 0 0 20px #ff69b4;
+            animation: floatUp linear infinite;
+            z-index: 2;
+            opacity: 0; 
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-120vh) scale(1); opacity: 0; }
+        }
+
+        /* --- DOPASOWANIA NA URZĄDZENIA MOBILNE --- */
+        @media (max-width: 768px) {
+            .flower-container {
+                height: 45vh;
+                min-height: 250px;
+            }
+            .caption {
+                font-size: 0.7rem;
+                letter-spacing: 1px;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Źródło "słońca" -->
+    <div class="sun-glow"></div>
+
+    <!-- Kontener wypychający na środek ekranu -->
+    <div class="content-wrapper">
+        <!-- Łąka -->
+        <div class="flower-container">
+            <svg viewBox="0 -150 1200 650" width="100%" height="100%" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">
+                
+                <defs>
+                    <!-- Trawy -->
+                    <g id="grass1"><path d="M0,0 Q10,-80 30,-150" stroke="#2E7D32" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+                    <g id="grass2"><path d="M0,0 Q-15,-70 -20,-120" stroke="#4CAF50" stroke-width="2" fill="none" stroke-linecap="round"/></g>
+                    <g id="grass3"><path d="M0,0 Q5,-100 -10,-180" stroke="#388E3C" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+
+                    <!-- KSZTAŁTY GŁÓWEK TULIPANÓW -->
+                    
+                    <!-- 1. Standardowa główka (półotwarta) -->
+                    <g id="head-std">
+                        <path d="M-15,-90 Q0,-130 15,-90 Q0,-20 -15,-90" fill="#AD1457"/>
+                        <path d="M0,0 C-30,0 -30,-100 0,-120 C15,-80 20,-50 0,0 Z" fill="#E91E63"/>
+                        <path d="M0,0 C30,0 30,-100 0,-120 C-15,-80 -20,-50 0,0 Z" fill="#F06292"/>
+                    </g>
+
+                    <!-- 2. Kwitnąca główka (węższa) -->
+                    <g id="head-open">
+                        <!-- Tylny płatek -->
+                        <path d="M-15,-70 Q0,-120 15,-70 Q0,-10 -15,-70" fill="#AD1457"/>
+                        <!-- Lewy płatek (zwężony) -->
+                        <path d="M0,0 C-35,0 -50,-80 -25,-105 C-10,-80 0,-40 0,0 Z" fill="#E91E63"/>
+                        <!-- Prawy płatek (zwężony) -->
+                        <path d="M0,0 C35,0 50,-80 25,-105 C10,-80 0,-40 0,0 Z" fill="#F06292"/>
+                        <!-- Przedni płatek (dopasowany proporcją) -->
+                        <path d="M0,0 C-15,0 -15,-80 0,-105 C15,-80 15,0 0,0 Z" fill="#FF80AB"/>
+                    </g>
+
+                    <!-- 3. Pąk (zamknięty, mniejszy, ciemniejszy) -->
+                    <g id="head-bud">
+                        <path d="M-10,-70 Q0,-100 10,-70 Q0,-20 -10,-70" fill="#880E4F"/>
+                        <path d="M0,0 C-20,0 -20,-80 0,-90 C10,-60 10,-40 0,0 Z" fill="#D81B60"/>
+                        <path d="M0,0 C20,0 20,-80 0,-90 C-10,-60 -10,-40 0,0 Z" fill="#E91E63"/>
+                    </g>
+
+                    <!-- KOMPLETNE KWIATY (Połączenie łodyg z odpowiednimi główkami) -->
+                    
+                    <!-- Proste -->
+                    <g id="t-straight-std">
+                        <path d="M0,0 Q-5,-150 0,-320" stroke="#2E7D32" stroke-width="8" fill="none" stroke-linecap="round"/>
+                        <path d="M0,-30 Q-40,-130 -50,-230 Q-20,-130 -5,-110" fill="#43A047" opacity="0.9"/>
+                        <path d="M0,-50 Q40,-150 50,-250 Q20,-150 5,-130" fill="#388E3C" opacity="0.9"/>
+                        <g transform="translate(0, -300)"><use href="#head-std"/></g>
+                    </g>
+
+                    <g id="t-straight-open">
+                        <path d="M0,0 Q5,-150 0,-320" stroke="#2E7D32" stroke-width="8" fill="none" stroke-linecap="round"/>
+                        <path d="M0,-40 Q-35,-140 -45,-240 Q-15,-140 0,-120" fill="#43A047" opacity="0.9"/>
+                        <g transform="translate(0, -300)"><use href="#head-open"/></g>
+                    </g>
+
+                    <!-- Zgięte w lewo -->
+                    <g id="t-left-std">
+                        <path d="M0,0 Q-15,-150 -30,-290" stroke="#2E7D32" stroke-width="8" fill="none" stroke-linecap="round"/>
+                        <path d="M-5,-40 Q-50,-140 -70,-220 Q-30,-120 -10,-100" fill="#43A047" opacity="0.9"/>
+                        <g transform="translate(-30, -270) rotate(-8)"><use href="#head-std"/></g>
+                    </g>
+
+                    <g id="t-left-open">
+                        <path d="M0,0 Q-15,-150 -30,-290" stroke="#2E7D32" stroke-width="8" fill="none" stroke-linecap="round"/>
+                        <path d="M-5,-40 Q-50,-140 -70,-220 Q-30,-120 -10,-100" fill="#43A047" opacity="0.9"/>
+                        <g transform="translate(-30, -270) rotate(-8)"><use href="#head-open"/></g>
+                    </g>
+
+                    <g id="t-left-bud">
+                        <path d="M0,0 Q-15,-150 -30,-290" stroke="#2E7D32" stroke-width="7" fill="none" stroke-linecap="round"/>
+                        <path d="M-5,-40 Q-40,-130 -60,-200 Q-20,-110 -5,-90" fill="#388E3C" opacity="0.9"/>
+                        <g transform="translate(-30, -270) rotate(-12)"><use href="#head-bud"/></g>
+                    </g>
+
+                    <!-- Zgięte w prawo -->
+                    <g id="t-right-std">
+                        <path d="M0,0 Q15,-150 30,-290" stroke="#388E3C" stroke-width="8" fill="none" stroke-linecap="round"/>
+                        <path d="M5,-50 Q45,-150 60,-230 Q25,-130 10,-110" fill="#4CAF50" opacity="0.9"/>
+                        <g transform="translate(30, -270) rotate(10)"><use href="#head-std"/></g>
+                    </g>
+
+                    <g id="t-right-open">
+                        <path d="M0,0 Q15,-150 30,-290" stroke="#388E3C" stroke-width="8" fill="none" stroke-linecap="round"/>
+                        <path d="M5,-40 Q50,-140 70,-220 Q30,-120 10,-100" fill="#4CAF50" opacity="0.9"/>
+                        <g transform="translate(30, -270) rotate(8)"><use href="#head-open"/></g>
+                    </g>
+
+                    <g id="t-right-bud">
+                        <path d="M0,0 Q20,-150 40,-270" stroke="#2E7D32" stroke-width="7" fill="none" stroke-linecap="round"/>
+                        <path d="M5,-30 Q40,-120 50,-190 Q20,-100 10,-80" fill="#388E3C" opacity="0.9"/>
+                        <g transform="translate(40, -250) rotate(15)"><use href="#head-bud"/></g>
+                    </g>
+                </defs>
+
+                <!-- Trawa w tle -->
+                <g transform="translate(30, 500)"><g class="grass-1" style="transform-origin: 0px 0px;"><use href="#grass1"/></g></g>
+                <g transform="translate(80, 500)"><g class="grass-2" style="transform-origin: 0px 0px;"><use href="#grass2"/></g></g>
+                <g transform="translate(130, 500)"><g class="grass-3" style="transform-origin: 0px 0px;"><use href="#grass3"/></g></g>
+                <g transform="translate(190, 500)"><g class="grass-1" style="transform-origin: 0px 0px;"><use href="#grass1"/></g></g>
+                <g transform="translate(250, 500)"><g class="grass-2" style="transform-origin: 0px 0px;"><use href="#grass2"/></g></g>
+                <g transform="translate(310, 500)"><g class="grass-3" style="transform-origin: 0px 0px;"><use href="#grass3"/></g></g>
+                <g transform="translate(380, 500)"><g class="grass-1" style="transform-origin: 0px 0px;"><use href="#grass1"/></g></g>
+                <g transform="translate(450, 500)"><g class="grass-2" style="transform-origin: 0px 0px;"><use href="#grass2"/></g></g>
+                <g transform="translate(520, 500)"><g class="grass-3" style="transform-origin: 0px 0px;"><use href="#grass3"/></g></g>
+                <g transform="translate(600, 500)"><g class="grass-1" style="transform-origin: 0px 0px;"><use href="#grass1"/></g></g>
+                <g transform="translate(680, 500)"><g class="grass-2" style="transform-origin: 0px 0px;"><use href="#grass2"/></g></g>
+                <g transform="translate(750, 500)"><g class="grass-3" style="transform-origin: 0px 0px;"><use href="#grass3"/></g></g>
+                <g transform="translate(820, 500)"><g class="grass-1" style="transform-origin: 0px 0px;"><use href="#grass1"/></g></g>
+                <g transform="translate(890, 500)"><g class="grass-2" style="transform-origin: 0px 0px;"><use href="#grass2"/></g></g>
+                <g transform="translate(950, 500)"><g class="grass-3" style="transform-origin: 0px 0px;"><use href="#grass3"/></g></g>
+                <g transform="translate(1020, 500)"><g class="grass-1" style="transform-origin: 0px 0px;"><use href="#grass1"/></g></g>
+                <g transform="translate(1100, 500)"><g class="grass-2" style="transform-origin: 0px 0px;"><use href="#grass2"/></g></g>
+                <g transform="translate(1160, 500)"><g class="grass-3" style="transform-origin: 0px 0px;"><use href="#grass3"/></g></g>
+
+                <!-- MIESZANKA TULIPANÓW (Pąki, Otwarte, Zamknięte) -->
+                <g transform="translate(50, 500) scale(0.7)"><g class="tulip-left" style="transform-origin: 0px 0px;"><use href="#t-left-std"/></g></g>
+                <g transform="translate(110, 500) scale(0.85)"><g class="tulip-straight" style="transform-origin: 0px 0px;"><use href="#t-straight-open"/></g></g>
+                <g transform="translate(190, 500) scale(0.6)"><g class="tulip-right" style="transform-origin: 0px 0px;"><use href="#t-right-bud"/></g></g>
+                <g transform="translate(260, 500) scale(1.05)"><g class="tulip-fast" style="transform-origin: 0px 0px;"><use href="#t-left-std"/></g></g>
+                <g transform="translate(340, 500) scale(0.8)"><g class="tulip-center" style="transform-origin: 0px 0px;"><use href="#t-straight-std"/></g></g>
+                <g transform="translate(420, 500) scale(1.15)"><g class="tulip-slow" style="transform-origin: 0px 0px;"><use href="#t-right-open"/></g></g>
+                <g transform="translate(500, 500) scale(0.75)"><g class="tulip-left" style="transform-origin: 0px 0px;"><use href="#t-straight-std"/></g></g>
+                <g transform="translate(580, 500) scale(1.0)"><g class="tulip-center" style="transform-origin: 0px 0px;"><use href="#t-left-open"/></g></g>
+                <g transform="translate(660, 500) scale(0.9)"><g class="tulip-right" style="transform-origin: 0px 0px;"><use href="#t-right-std"/></g></g>
+                <g transform="translate(740, 500) scale(0.65)"><g class="tulip-fast" style="transform-origin: 0px 0px;"><use href="#t-right-bud"/></g></g>
+                <g transform="translate(830, 500) scale(1.2)"><g class="tulip-slow" style="transform-origin: 0px 0px;"><use href="#t-straight-open"/></g></g>
+                <g transform="translate(930, 500) scale(0.85)"><g class="tulip-center" style="transform-origin: 0px 0px;"><use href="#t-left-std"/></g></g>
+                <g transform="translate(1020, 500) scale(0.95)"><g class="tulip-right" style="transform-origin: 0px 0px;"><use href="#t-right-open"/></g></g>
+                <g transform="translate(1110, 500) scale(0.7)"><g class="tulip-left" style="transform-origin: 0px 0px;"><use href="#t-left-bud"/></g></g>
+                <g transform="translate(1180, 500) scale(0.9)"><g class="tulip-fast" style="transform-origin: 0px 0px;"><use href="#t-straight-std"/></g></g>
+
+                <!-- Trawa na pierwszym planie -->
+                <g transform="translate(100, 500)"><g class="grass-3" style="transform-origin: 0px 0px;"><use href="#grass3"/></g></g>
+                <g transform="translate(290, 500)"><g class="grass-1" style="transform-origin: 0px 0px;"><use href="#grass1"/></g></g>
+                <g transform="translate(430, 500)"><g class="grass-2" style="transform-origin: 0px 0px;"><use href="#grass2"/></g></g>
+                <g transform="translate(620, 500)"><g class="grass-3" style="transform-origin: 0px 0px;"><use href="#grass3"/></g></g>
+                <g transform="translate(870, 500)"><g class="grass-1" style="transform-origin: 0px 0px;"><use href="#grass1"/></g></g>
+                <g transform="translate(1080, 500)"><g class="grass-2" style="transform-origin: 0px 0px;"><use href="#grass2"/></g></g>
+            </svg>
+        </div>
+
+        <!-- Podpis -->
+        <div class="caption">
+            Różowe Tulipany dla najwspanialszej dziewczyny na świecie
+        </div>
+    </div>
+
+    <!-- Skrypt dodający magiczne świetliki w tle -->
+    <script>
+        function createParticles() {
+            const particleCount = 40; 
+            for (let i = 0; i < particleCount; i++) {
+                let particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                let size = Math.random() * 4 + 2; 
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.left = `${Math.random() * 100}vw`;
+                
+                let duration = Math.random() * 6 + 4; 
+                particle.style.animationDuration = `${duration}s`;
+                
+                let delay = Math.random() * 5; 
+                particle.style.animationDelay = `${delay}s`;
+                
+                document.body.appendChild(particle);
+            }
+        }
+
+        window.onload = createParticles;
+    </script>
+</body>
+</html>
